@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="A code A world">
 <meta property="og:description" content="In mobile application, ListView is one of the most important Components. Unlike ScrollView , ListView don’t render all of subviews, it just renders all visible elements at first. In ListView , there a">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-01-22T04:55:10.000Z">
+<meta property="og:updated_time" content="2018-01-22T22:29:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ListView - React Native">
 <meta name="twitter:description" content="In mobile application, ListView is one of the most important Components. Unlike ScrollView , ListView don’t render all of subviews, it just renders all visible elements at first. In ListView , there a">
@@ -302,7 +302,8 @@
       
         <p>In mobile application, <code>ListView</code> is one of the most important Components. Unlike <code>ScrollView</code> , ListView don’t render all of subviews, it just renders all visible elements at first.</p>
 <p>In <code>ListView</code> , there are two important properties : <code>dataSource</code> and <code>renderRow</code>. </p>
-<h4 id="how-to-use-ListView"><a href="#how-to-use-ListView" class="headerlink" title="how to use ListView"></a>how to use ListView</h4><ol>
+<h4 id="how-to-use-ListView"><a href="#how-to-use-ListView" class="headerlink" title="how to use ListView"></a>how to use ListView</h4><a id="more"></a>
+<ol>
 <li>Initialize dataSource:</li>
 </ol>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ds = <span class="keyword">new</span> ListView.DataSource(&#123;<span class="attr">rowHasChanged</span>: <span class="function">(<span class="params">r1, r2</span>) =&gt;</span> r1 !== r2&#125;);</span><br><span class="line"><span class="keyword">this</span>.dataSource = ds.cloneWithRows(<span class="keyword">this</span>.props.element);</span><br></pre></td></tr></table></figure>

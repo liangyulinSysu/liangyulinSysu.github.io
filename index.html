@@ -299,57 +299,19 @@
 
       
         
-          
-            <p>As we know, Web Application is a kind of state machine, where each view corresponds to a state. Based on this thought, Redux is introduced to store all state as a state manager.</p>
+          <p>As we know, Web Application is a kind of state machine, where each view corresponds to a state. Based on this thought, Redux is introduced to store all state as a state manager.</p>
 <ol>
 <li><p>Store</p>
 <p>Store is a container holds all state. An application only has a store.</p>
 <p><code>createStore</code> is the main function to create a Store.</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">const</span> store = createStore(fn);</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Action </p>
-<p><code>Action</code> is the bridge connecting <code>views</code> and <code>states</code>, since users can’t get access to the states directly, they can only touch views, and call action to change the state.</p>
-<p>There are two important properties in the Action object:</p>
-<ul>
-<li><code>type</code>: the name of the Action</li>
-<li><code>payload</code>: the data transferred through this Action</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> action = &#123;</span><br><span class="line">  type: <span class="string">'selected_library'</span>,</span><br><span class="line">  payload: <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Action Creator</p>
-<p>Normally, we can create a function to generate an Action:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> selectedLibrary = <span class="function">(<span class="params">libraryId</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">  	type: <span class="string">'selected_library'</span>,</span><br><span class="line">    payload: libraryId</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h4 id="store-dispatch"><a href="#store-dispatch" class="headerlink" title="store.dispatch()"></a>store.dispatch()</h4><p>But how do we call an Action? Store provides a function to help us solve this problem, <code>dispatch()</code>. It received an Action object as an argument, and calls this function.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">store.dispatch(selecedLibrary(<span class="number">1</span>));</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Reducer</p>
-<p>After receiving an Action, Store has to change its corresponding state. The process is Reducer.</p>
-<p><code>Reducer</code> takes <code>Action</code> and <code>State</code> as its arguments, and return a new <code>state</code>.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> reducer = <span class="function">(<span class="params">state, action</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">switch</span>(action.type) &#123;</span><br><span class="line">      ...</span><br><span class="line">      <span class="keyword">return</span> newState;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="Simplify-Reducer"><a href="#Simplify-Reducer" class="headerlink" title="Simplify Reducer"></a>Simplify Reducer</h4><p>For an application, there must exists a large number of Reducer function, like the following:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> appReducer = <span class="function">(<span class="params">state = defaultState, action = &#123;&#125;</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; type, payload &#125; = action;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">switch</span>(type) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">'ADD'</span>:</span><br><span class="line">      <span class="keyword">return</span> newState1;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">'DELETE'</span>:</span><br><span class="line">      <span class="keyword">return</span> newState2;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      <span class="keyword">return</span> state;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>This Style is really hard to read. A better way to solve this problem is to create separated Reducers, and combine all Reducers into a <code>combineReducers</code></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> combineReducers(&#123;</span><br><span class="line">  reducer1 : AddReducer,</span><br><span class="line">  reducer2 : DelReducer</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>connect()  — ‘react - redux’</p>
-<p>React-Redux provides a <code>connect()</code> function to link <code>UI Component</code> and its <code>business logic</code>.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; connect &#125; <span class="keyword">from</span> <span class="string">'react-redux'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> Component = connect(mapStateToProps, mapDispatchToProps)(UIComponent)</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p><code>UIComponent</code> is just a simple encapsulation of UI components</p>
-</li>
-<li><p><code>mapStateToProps</code> — <code>input logic</code> , defines the way that transform external data to its props</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> mapStateToProps = <span class="function"><span class="params">state</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="attr">libraries</span>: state.libraries &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>From the code above, we know that it receives a state object as its input, and generate a props <code>libraries</code> which equals to state.libraries.</p>
-</li>
-<li><p><code>mapDispatchToProps</code> — <code>output logic</code> , defines the way that generate Action objects based on user’s operation, and send from the UI component.</p>
-<p>It construct a way to map the props of Component to store.dispatch.</p>
-</li>
-</ul>
-<p>​</p>
-</li>
-</ol>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/01/22/Redux/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -466,26 +428,16 @@
 
       
         
-          
-            <p>In mobile application, <code>ListView</code> is one of the most important Components. Unlike <code>ScrollView</code> , ListView don’t render all of subviews, it just renders all visible elements at first.</p>
+          <p>In mobile application, <code>ListView</code> is one of the most important Components. Unlike <code>ScrollView</code> , ListView don’t render all of subviews, it just renders all visible elements at first.</p>
 <p>In <code>ListView</code> , there are two important properties : <code>dataSource</code> and <code>renderRow</code>. </p>
-<h4 id="how-to-use-ListView"><a href="#how-to-use-ListView" class="headerlink" title="how to use ListView"></a>how to use ListView</h4><ol>
-<li>Initialize dataSource:</li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ds = <span class="keyword">new</span> ListView.DataSource(&#123;<span class="attr">rowHasChanged</span>: <span class="function">(<span class="params">r1, r2</span>) =&gt;</span> r1 !== r2&#125;);</span><br><span class="line"><span class="keyword">this</span>.dataSource = ds.cloneWithRows(<span class="keyword">this</span>.props.element);</span><br></pre></td></tr></table></figure>
-<p>In the code above, <code>this.props.element</code> is the data source that we use to render the list view.</p>
-<p><code>rowHasChanged(prevRowData, nextRowData)</code> is a strategy to update a row, normally we update a row if prevRowData not equal to nextRowData.</p>
-<p><code>cloneWithRows(dataBlob, rowIdentities)</code> is a deep copy. If the dataBlog is changed, it won’t affect our current rendering.</p>
-<ol>
-<li>Setting the property <code>dataSource</code> </li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dataSource=&#123;<span class="keyword">this</span>.dataSource&#125;</span><br></pre></td></tr></table></figure>
-<ol>
-<li>Setting the property <code>renderRow</code></li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">renderRow( element ) &#123;</span><br><span class="line">  <span class="keyword">return</span> &lt;Text&gt;&#123;element&#125;&lt;/Text&gt;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">&lt;ListView</span><br><span class="line">	dataSource=&#123;<span class="keyword">this</span>.dataSource&#125;</span><br><span class="line">	renderRow=&#123;<span class="keyword">this</span>.renderRow&#125;</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure>
-
-          
+<h4 id="how-to-use-ListView"><a href="#how-to-use-ListView" class="headerlink" title="how to use ListView"></a>how to use ListView</h4>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/01/21/ListView/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -602,29 +554,17 @@
 
       
         
-          
-            <p>Suppose there is a component named <code>SampleTool</code> in the <code>./Components/SampleTool.js</code> </p>
+          <p>Suppose there is a component named <code>SampleTool</code> in the <code>./Components/SampleTool.js</code> </p>
 <p>Normally, we will write the following  code to import the component:</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> SampleTool <span class="keyword">from</span> <span class="string">'./Components/SampleTool'</span></span><br></pre></td></tr></table></figure>
 <p>But generally we will have so many components in the ‘Components’ directory, we don’t want to import these components by searching their path, we can use <code>index.js</code> to simple our importing process.</p>
-<p>In react native, if the path we use is a directory, it will automatically search components in the index.js in the directory.</p>
-<p>There are 3 steps :</p>
-<ol>
-<li><p>In js file, we have to export an object. Replacing the following code </p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> SampleTool;</span><br></pre></td></tr></table></figure>
-<p>by</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> &#123; SampleTool &#125;;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Creating an index.js in the corresponding directory, and writing the following code to export all components from the directory:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./SampleTool'</span>;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Finally, if we want to import a component, we just need to find it from the directory</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; SampleTool &#125; <span class="keyword">from</span> <span class="string">'./Component'</span></span><br></pre></td></tr></table></figure>
-<p>​</p>
-</li>
-</ol>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/01/20/Import-Component/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
